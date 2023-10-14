@@ -17,6 +17,7 @@ To-do list voor 17-10:
       - To do: de windows worden niet automatisch naar de voorgrond geduwd en de afmetingen zijn nog niet helemaal goed
       - To do: de juiste Anaconda omgeving aanmaken en deze als back-up saven en in github zetten
       - To do: een keer een volledige test te doen: van het opbouwen van de omgeving t/m draaien in Jupyter notebook
+    - Onder de benodigde libraries wordt PyTorch genoemd voor het bouwen van deep neural networks. Ik heb de vraag uitgezet       bij Daniel of we inderdaad ons eigen deep neural network moeten bouwen. 
 6. Analyseren van 1 opvallend gek resultaat (Matthew)
 7. Spelen met 1 hyper parameter (aantal frames voor training) en effect accuracy (Remco)
 
@@ -28,5 +29,12 @@ To-list voor 17-11:
 1. Analyseren van de 3 opvallende gekke resultaten
 2. Uitvoeren lijst met experimenten
 3. Spelen met extra hyper parameters
-4. ...
+4. Toevoegen historical context aan report
+5. Toevoegen related literature aan report
+6. Toevoegen vergelijking resultaten met literatuur
+7. Toevoegen referenties die gebruikt zijn in het report
+8. Zorgen dat de windows naar de voorgrond worden geduwd en dat de sizing goed is
+9. Zorgen dat de juiste Anacaonda omgeving als back-up in github staat
+10. Volledige end-to-end test doen
+11. ...
 
