@@ -1,0 +1,6 @@
+trainer.yml
+/Video
+/training
+.DS_Store
+/__pycache__
+/.vscode

@@ -26,7 +26,7 @@ class Trainer:
             # And we extract the id of the image file name
             id = int(os.path.split(imagePath)[-1].split(".")[1])
             # We extract the faces, if any, from the array
-            faces = self.__detector.detectMultiScale(img_numpy)
+            faces = self.face_samples.detectMultiScale(img_numpy, minNeighbors=10)
             # And we loop through the faces
             for (x, y, w, h) in faces:
                 # And for each face, we add the rectangle of the array to the face samples
@@ -38,9 +38,23 @@ class Trainer:
 
     def train(self, training_path:str, training_model_file_name:str):
         # Extract the lists of faces and corresponding ids from the training snapshots
+        print("gettings images and labels")
         faces, ids = self.__getImagesAndLabels(training_path)
+        print("done gettings images and lables")
         # We train the learner on the extracted faces
-        self.__recognizer.train(faces, np.array(ids))
+        print("trainig...")
+        self.__recognizer.train(faces[1::2], np.array(ids[1::2]))
+        print("testings...")
+        # get model performance
+        total:int = len(ids[0::2])
+        good:int = 0
+        test_faces = faces[0::2]
+        for index, correct_id in enumerate(ids[0::2]):
+            id, confidence = self.__recognizer.predict(test_faces[index])
+            if(id == correct_id and confidence < 70):
+                good+=1
+        print("Percentage good = ",(good/total)*100)   
+
         # Save the learned model into the trainer.yml file
         self.__recognizer.write(training_model_file_name)
 

@@ -7,8 +7,8 @@ import io
 from PIL import Image
 import plotly_express as px
 import plotly.io as pio
-
-
+from matplotlib.collections import PolyCollection
+import pandas as pd
 
 class Visualizer:
 
@@ -63,10 +63,43 @@ class Visualizer:
         cv2.imshow("stats1", np.asarray(img1))
         cv2.imshow("stats2", np.asarray(img2))
         cv2.imshow("video", frame)
-
+        
         k = cv2.waitKey(1)
-
         return k
+
+# WIP   
+    def pick_handler(event):
+        if isinstance(event.artist, PolyCollection):
+            patch : PolyCollection = event.artist
+            start_x = patch.get_paths()[0].vertices[0][0]
+            end_x = patch.get_paths()[0].vertices[2][0]
+            print('onpick1 patch: start:', start_x," end: ", end_x)
+    # Visualization with matplot using broken bar chart 
+    # Mabye usefull to intercept click event then jump tho frame?
+    def visualizev2(identity_timeline_appearances : pd.DataFrame):
+        fig, ax = plt.subplots()
+        fig.canvas.mpl_connect('pick_event', Visualizer.pick_handler)
+
+        ListOfIdentities = identity_timeline_appearances["identity"].drop_duplicates().tolist()
+        ax.set_yticks(list(map(lambda x: 15+(x*10),[*range(0, len(ListOfIdentities))])), labels=ListOfIdentities)     # Modify y-axis tick labels
+
+        bars = []
+        # Loop through all identities
+        for i, name in enumerate(ListOfIdentities):
+            appearances_by_identities = identity_timeline_appearances.loc[(identity_timeline_appearances["identity"] == name)]
+            # Get all points
+            for index in appearances_by_identities.index:
+                bars.append((appearances_by_identities["start_frame"][index],
+                            appearances_by_identities["frame_amount"][index]))
+            ax.broken_barh(bars, ((i+1)*10, 9), facecolors='tab:blue', picker=True)
+            bars = []
+
+        ax.set_ylim(5, 55)
+        ax.set_xlim(0, 200)
+        ax.set_xlabel('frames')
+        ax.grid(False)                                       # Make grid lines visible
+
+        plt.show()
 
     def release(self):
         cv2.destroyAllWindows()

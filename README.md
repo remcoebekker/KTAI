@@ -16,3 +16,9 @@ To-list voor 17-11:
 2. Uitvoeren lijst met experimenten
 3. Spelen met extra hyper parameters
 
+Notes:
+Op het moment gebruiken we dit algoritme om gezichten te herkennen: LBPHFaceRecognizer.
+Meer info hierover: https://pyimagesearch.com/2021/05/03/face-recognition-with-local-binary-patterns-lbps-and-opencv/
+https://docs.opencv.org/3.4/da/d60/tutorial_face_main.html
+
+
