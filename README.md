@@ -10,7 +10,7 @@ To-do list voor 17-10:
       - To do: toevoegen Short description of the problem (including **historical context**) and the starting material
       - To do: toevoegen **overview of the related literature on this subject**.
       - To do: toevoegen A discussion section in which you summarize the results, **compare the results with the literature 
-        from the introduction, indicate possible limitations of your work, and provide suggestions for future research**
+        from the introduction, indicate possible limitations of your work, and provide suggestions for future research**
       - To do: **List the references that you used in the report.**
    - Er staat niet keihard dat het in Jupyter notebook moet draaien, maar lijkt me toch verstandig om daarvan uit te 
      gaan. Als je in Anaconda de juiste omgeving creëert dan draait de applicatie in Jupyter notebook.
