@@ -2,57 +2,98 @@ import Dataset_collector
 import Trainer
 import FaceRecognizer
 import pandas as pd
-import numpy as np
 import matplotlib
 from matplotlib.collections import PolyCollection
 import matplotlib.pylab as plt
+import tabulate
 matplotlib.use('TkAgg')
+
+# The three  identities to be trained on
+TRAINING_IDENTITIES = ["Leonie", "Remco", "Richard"]
+# The three mp4 files of the three identities to be trained on
+TRAINING_VIDEOS = ["./Video/AT_Leonie.mp4", "./Video/AT_Remco.mp4", "./Video/AT_Richard.mp4"]
+# The separate training folder, in which the extracted training face shots are recorded
+TRAINING_FOLDER = "training"
+# The test video on which we test how well the identities are recognized and with which we perform stress-tests
+TEST_VIDEO = "./Video/RHDHV#221207_Video_Analytics translator_V02.mp4"
+# Determines how fast we go through the test video. 2 means we process every other frame, 3 means we process every
+# other third frame. Etc.
+TEST_VIDEO_SAMPLING_SPEED = 2
 
 def run():
     """
     Main function for the overall flow of the application.
     """
 
-
-    # First step is learning the algorithm what the faces look like
-    # We use three mp4 files of the three identities to be trained on
-    training_identities = ["Leonie", "Remco", "Richard"]
-    # The following triples represent the start frame, the end frame and the number of frames in between in which the
-    # identities appear. Since we process every other frame, the frames and appearances are multiples of 2.
-    sequences = pd.DataFrame(columns = ["sequence", "startframe", "endframe", "identity"])
-    sequences.loc[len(sequences)] = [1, 2, 934, "Remco"]
-    sequences.loc[len(sequences)] = [2, 936, 2228, "Leonie"]
-    sequences.loc[len(sequences)] = [3, 2230, 3492, "Richard"]
-    training_videos = ["./Video/AT_Leonie.mp4", "./Video/AT_Remco.mp4", "./Video/AT_Richard.mp4"]
-    training_folder = "training"
     # We instantiate a Dataset collector object which will extract images from the training videos of the faces
     collector = Dataset_collector.Dataset_collector()
     #dataset = collector.collect_training_faces_from_videos(training_folder, training_videos)
 
-    # Next up is instantiating the Trainer based ad having it learn what the faces look like, in other words
+    # Next up is instantiating the Trainer based and having it learn what the faces look like, in other words
     # learning the identity embeddings
     trainer = Trainer.Trainer()
-    trainer.train(training_folder, "trainer.yml")
+    trainer.train(TRAINING_FOLDER, "trainer.yml")
 
     # Now we ware ready to put the trained model to the test
     # We instantiate the face_recognizer object and have it identify the faces in a video in which all three
     # trained faces appear
-    face_recognizer = FaceRecognizer.FaceRecognizer(training_identities, "trainer.yml", sequences)
+    face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences())
   #  identities_count = face_recognizer.recognize_face_in_webcam(training_identities)
-    sequence_results = face_recognizer.recognize_faces_of_identities_in_video(
-        "./Video/RHDHV#221207_Video_Analytics translator_V02.mp4")
+    sequence_results = face_recognizer.recognize_faces_of_identities_in_video(TEST_VIDEO)
 
+    print(tabulate.tabulate(get_accuracy_table(sequence_results)))
+
+
+def get_sequences():
+    # The following triples represent the start frame, the end frame and the number of frames in between in which the
+    # identities appear.
+    sequences = pd.DataFrame(columns=["sequence", "startframe", "endframe", "identity"])
+    sequences.loc[len(sequences)] = [1, 2, 934, "Remco"]
+    sequences.loc[len(sequences)] = [2, 935, 2228, "Leonie"]
+    sequences.loc[len(sequences)] = [3, 2229, 3492, "Richard"]
+    sequences.loc[len(sequences)] = [4, 3493, 4000, "Blank"]
+    return sequences
+
+
+def run_hyper_parameter_1_test():
+    print("Hyper parameter 1 stress-test: changing the frame training count")
+    # We instantiate the trainer
+    trainer = Trainer.Trainer()
+
+    # We will test the variation in accuracy when we change the number of frames per identity that we train on
+    frame_training_count = [20, 50, 100, 500]
+
+    # We loop through the different frame training counts and for each train the trainer with the specified number
+    # of training frames.
+    for i in range(0, len(frame_training_count)):
+        print("Frame training count = " + str(frame_training_count[i]))
+        trainer.train(TRAINING_FOLDER, "trainer.yml", frame_training_count[i])
+
+        # Now we are ready to put the trained model to the test
+        # We instantiate the face_recognizer object and have it identify the faces in a video in which all three
+        # trained faces appear
+        face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), False)
+        sequence_results = face_recognizer.recognize_faces_of_identities_in_video(TEST_VIDEO,
+                                                                                  TEST_VIDEO_SAMPLING_SPEED,
+                                                                                  0)
+
+        # We output the accuracy for this training frame count
+        print(tabulate.tabulate(get_accuracy_table(sequence_results, TEST_VIDEO_SAMPLING_SPEED)))
+
+def get_accuracy_table(sequence_results, test_video_sampling_speed: int):
+    # We turn the sequence results into a table with the accuracy per sequence
     table = [["Sequence", "Accuracy"]]
-    for index, row in sequences.iterrows():
-        actual_appearances = (row["endframe"] - row["startframe"]) / 2
+    for index, row in get_sequences().iterrows():
+        actual_appearances = (row["endframe"] - row["startframe"]) / test_video_sampling_speed
         seqnum = row["sequence"]
         identity = row["identity"]
         sequence_result = sequence_results.query("sequence == @seqnum and identity == @identity")
         if len(sequence_result) > 0:
             predicted_appearances = sequence_result["appearances"].item()
             table.append([row["sequence"], format(predicted_appearances / actual_appearances, "0.2%")])
+    return table
 
-    # print(tabulate.tabulate(table))
+
 def pick_handler(event):
      if isinstance(event.artist, PolyCollection):
         patch : PolyCollection = event.artist
@@ -87,5 +128,7 @@ def visualizev2(identity_timeline_appearances : pd.DataFrame):
 
 # If this module is run, it will call the run function
 if __name__ == "__main__":
-    run()
+    run_hyper_parameter_1_test()
+#    run()
+
     
