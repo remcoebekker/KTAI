@@ -1,10 +1,8 @@
 # KTAI
 Repo for face recognition assingment
-To-do list voor 17-10:
-1. Introspectie van code + overleaf inclusief verbeteringen / uitbreidingen (Matthew)
-6. Analyseren van 1 opvallend gek resultaat (Matthew)
 
 Done voor 17-10:
+1. Introspectie van code + overleaf inclusief verbeteringen / uitbreidingen (Matthew)
 2. Check op gebruik andere face recognizer dan in opdracht tekst (Remco) -> Antwoord is dat we vrij zijn om te kiezen.
 4. Checken of we voldoen aan alle requirements uit de opdrachtbeschrijving (Remco)
     - Code kan opgeleverd worden via een Public Github Repo; beeldmateriaal zullen we dan separaat moeten delen met de 
@@ -21,6 +19,7 @@ Done voor 17-10:
       - To do: de juiste Anaconda omgeving aanmaken en deze als back-up saven en in github zetten
       - To do: een keer een volledige test te doen: van het opbouwen van de omgeving t/m draaien in Jupyter notebook
     - Onder de benodigde libraries wordt PyTorch genoemd voor het bouwen van deep neural networks. Ik heb de vraag uitgezet       bij Daniel of we inderdaad ons eigen deep neural network moeten bouwen. -> Antwoord is dat we vrij zijn om te kiezen.
+6. Analyseren van 1 opvallend gek resultaat (Matthew)
 7. Spelen met 1 hyper parameter (aantal frames voor training) en effect accuracy (Remco)
 
 To-do list voor 20-10:
