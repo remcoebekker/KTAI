@@ -24,7 +24,8 @@ Done voor 17-10:
 
 To-do list voor 20-10:
 1. Lijstje bedenken met experimenten die we uit willen gaan voeren in de komende 4 weken 
-2. Afmaken eerste versie van het overleaf rapport 
+2. Afmaken eerste versie van het overleaf rapport:
+   - Achtergrond van opencv / haar cascades
 
 To-list voor 17-11:
 1. Analyseren van de 3 opvallende gekke resultaten
