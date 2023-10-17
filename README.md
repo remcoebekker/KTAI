@@ -23,9 +23,13 @@ Done voor 17-10:
 7. Spelen met 1 hyper parameter (aantal frames voor training) en effect accuracy (Remco)
 
 To-do list voor 20-10:
-1. Lijstje bedenken met experimenten die we uit willen gaan voeren in de komende 4 weken 
-2. Afmaken eerste versie van het overleaf rapport:
-   - Achtergrond van opencv / haar cascades
+1. Lijstje bedenken met experimenten die we uit willen gaan voeren in de komende 4 weken (Remco):
+   - Icoontjes / noise voor gezichten en robuustheid checken
+   - Met Webcam spelen: jij zit niet in de videos: wanneer herkent het algoritme jou als 1 van de identiteiten en als gezicht --> robuustheid
+   - Met Webcam spelen: ik zit wel in de videos: wanneer herkent het algoritme mij niet meer als 1 van identiteiten: zonnebril, petje, bril op
+3. Afmaken eerste versie van het overleaf rapport:
+   - Achtergrond van opencv / haar cascades (Matthew)
+   - Opnemen referentie met 8 verbeterpunten voor optimalisatie trainingsmateriaal (Matthew)
 
 To-list voor 17-11:
 1. Analyseren van de 3 opvallende gekke resultaten
