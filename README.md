@@ -22,7 +22,7 @@ Done voor 17-10:
 6. Analyseren van 1 opvallend gek resultaat (Matthew)
 7. Spelen met 1 hyper parameter (aantal frames voor training) en effect accuracy (Remco)
 
-To-do list voor 20-10:
+Done voor 20-10:
 1. Lijstje bedenken met experimenten die we uit willen gaan voeren in de komende 4 weken (Remco):
    - Icoontjes / noise voor gezichten en robuustheid checken
    - Met Webcam spelen: jij zit niet in de videos: wanneer herkent het algoritme jou als 1 van de identiteiten en als gezicht --> robuustheid
