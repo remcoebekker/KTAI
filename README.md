@@ -32,17 +32,20 @@ Done voor 20-10:
    - Opnemen referentie met 8 verbeterpunten voor optimalisatie trainingsmateriaal (Matthew)
 
 To-list voor 17-11:
-1. Analyseren van de 3 opvallende gekke resultaten
-2. Uitvoeren lijst met experimenten
-3. Spelen met extra hyper parameters
-4. Toevoegen historical context aan report
-5. Toevoegen related literature aan report
-6. Toevoegen vergelijking resultaten met literatuur
-7. Toevoegen referenties die gebruikt zijn in het report
-8. Zorgen dat de windows naar de voorgrond worden geduwd en dat de sizing goed is
-9. Zorgen dat de juiste Anacaonda omgeving als back-up in github staat
-10. Volledige end-to-end test doen
-11. ...
+1. Verwerken feedback
+2. Analyseren van de 3 opvallende gekke resultaten (Matthew)
+3. Uitvoeren lijst met experimenten
+   - Icoontjes / noise voor gezichten en robuustheid checken
+   - Met Webcam spelen: jij zit niet in de videos: wanneer herkent het algoritme jou als 1 van de identiteiten en als g            gezicht --> robuustheid
+   - Met Webcam spelen: ik zit wel in de videos: wanneer herkent het algoritme mij niet meer als 1 van identiteiten:               zonnebril, petje, bril op
+4. Spelen met extra hyper parameters
+5. Toevoegen historical context aan report
+6. Toevoegen related literature aan report
+7. Toevoegen vergelijking resultaten met literatuur
+8. Zorgen dat de juiste Anacaonda omgeving als back-up in github staat (Remco)
+9. Volledige end-to-end test doen (Remco)
+10. Zorgen dat de windows naar de voorgrond worden geduwd en dat de sizing goed is
+...
 
 Notes:
 Op het moment gebruiken we dit algoritme om gezichten te herkennen: LBPHFaceRecognizer.
