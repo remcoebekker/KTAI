@@ -53,3 +53,14 @@ Meer info hierover: https://pyimagesearch.com/2021/05/03/face-recognition-with-l
 https://docs.opencv.org/3.4/da/d60/tutorial_face_main.html
 
 
+
+Anaconda:
+1. Create new environment
+2. Open terminal
+3. pip install opencv-contrib-python
+4. conda install -c conda-forge notebook
+5. pip install Pillow
+6. pip install matplotlib
+7. pip install plotly-express
+8. pip install tabulate
+9. 
