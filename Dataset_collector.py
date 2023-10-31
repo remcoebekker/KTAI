@@ -1,14 +1,21 @@
 import cv2
+import os
 
 
 class Dataset_collector:
 
-    __NUMBER_OF_FRAMES_SAMPLED = 500
 
     def __init__(self):
         self.__faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-    def collect_training_faces_from_videos(self, training_path:str, videos:list):
+    def are_training_faces_already_collected_from_videos(self, training_path:str, videos:list, number_of_sampled_frames)->bool:
+        files = os.listdir(training_path)
+        if len(files) == len(videos) * number_of_sampled_frames:
+            return True
+
+        return False
+
+    def collect_training_faces_from_videos(self, training_path:str, videos:list, number_of_sampled_frames):
         # We loop through the list of training videos
         for i in range(0, len(videos)):
             cap = cv2.VideoCapture(videos[i])
@@ -41,7 +48,7 @@ class Dataset_collector:
                         # Save the captured face snapshot into the training folder
                         cv2.imwrite(training_path + "//User." + str(face_id) + '.' + str(count) + ".jpg", gray[y:y + h, x:x + w])
                     # We take 500 snapshots into account for each identity
-                    if count >= self.__NUMBER_OF_FRAMES_SAMPLED:
+                    if count >= number_of_sampled_frames:
                         at_end = True
             # Close the file
             cap.release()

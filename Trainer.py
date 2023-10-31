@@ -43,13 +43,13 @@ class Trainer:
 
     def train(self, training_path:str, training_model_file_name:str, frame_training_count:int):
         # Extract the lists of faces and corresponding ids from the training snapshots
-        print("gettings images and labels")
+        print("getting images and labels")
         faces, ids = self.__getImagesAndLabels(training_path, frame_training_count)
-        print("done gettings images and labels")
+        print("done getting images and labels")
         # We train the learner on the extracted faces
         print("training...")
         self.__recognizer.train(faces, np.array(ids))
-        print("testings...")
+        print("testing...")
         # get model performance
 
         # Save the learned model into the trainer.yml file

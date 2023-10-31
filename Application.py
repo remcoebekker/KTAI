@@ -19,30 +19,43 @@ TEST_VIDEO = "./Video/RHDHV#221207_Video_Analytics translator_V02.mp4"
 # Determines how fast we go through the test video. 2 means we process every other frame, 3 means we process every
 # other third frame. Etc.
 TEST_VIDEO_SAMPLING_SPEED = 2
+# Determines how many frames we are sampling from the training videos
+NUMBER_OF_FRAMES_SAMPLED = 500
 
-def run():
+
+def run(webcam_testing:bool):
     """
     Main function for the overall flow of the application.
     """
 
     # We instantiate a Dataset collector object which will extract images from the training videos of the faces
     collector = Dataset_collector.Dataset_collector()
-    #dataset = collector.collect_training_faces_from_videos(training_folder, training_videos)
+    # We check whether or not the faces are already collected from the videos
+    if collector.are_training_faces_already_collected_from_videos(TRAINING_FOLDER, TRAINING_VIDEOS, NUMBER_OF_FRAMES_SAMPLED) == False:
+        # This is not the case, so we collect the faces from the videos
+        print("We need to collect the faces from the training videos...this will take a few minutes")
+        collector.collect_training_faces_from_videos(TRAINING_FOLDER, TRAINING_VIDEOS, NUMBER_OF_FRAMES_SAMPLED)
 
     # Next up is instantiating the Trainer based and having it learn what the faces look like, in other words
     # learning the identity embeddings
     trainer = Trainer.Trainer()
-    trainer.train(TRAINING_FOLDER, "trainer.yml")
+    trainer.train(TRAINING_FOLDER, "trainer.yml", NUMBER_OF_FRAMES_SAMPLED)
 
-    # Now we ware ready to put the trained model to the test
-    # We instantiate the face_recognizer object and have it identify the faces in a video in which all three
-    # trained faces appear
-    face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences())
-  #  identities_count = face_recognizer.recognize_face_in_webcam(training_identities)
-    sequence_results = face_recognizer.recognize_faces_of_identities_in_video(TEST_VIDEO)
+    # Now we ware ready to put the trained model to the test. We instantiate the face_recognizer object
+    # Are we webcam testing?
+    if webcam_testing:
+        print("We are webcam testing...")
+        face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), True)
+        identities_count = face_recognizer.recognize_face_in_webcam()
+    else:
+        print("We are testing on a test video...")
+        face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), False)
+        sequence_results = face_recognizer.recognize_faces_of_identities_in_video(TEST_VIDEO,
+                                                                              TEST_VIDEO_SAMPLING_SPEED,
+                                                                              0)
 
-    print(tabulate.tabulate(get_accuracy_table(sequence_results)))
-
+        # We output the accuracy for this training frame count
+        print(tabulate.tabulate(get_accuracy_table(sequence_results, TEST_VIDEO_SAMPLING_SPEED)))
 
 def get_sequences():
     # The following triples represent the start frame, the end frame and the number of frames in between in which the
@@ -128,7 +141,7 @@ def visualizev2(identity_timeline_appearances : pd.DataFrame):
 
 # If this module is run, it will call the run function
 if __name__ == "__main__":
-    run_hyper_parameter_1_test()
-#    run()
+    #run_hyper_parameter_1_test()
+    run(True)
 
     
