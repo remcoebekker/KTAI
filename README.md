@@ -21,7 +21,7 @@ h. pip install tabulate
 12. Next execute the "import Application" and "Application.run_hyper_parameter_1_test()" lines
 13. After a few minutes of setting up, it will output the accuracy of identity recognition for different numbers of face shots being used for training purposes.
 14. Finally, execute the "import Application" and "Application.run(True)" lines
-15. After a few minutes of setting up, it will show a webcam window, that will show the detection of your own face and whether or not it recognizes your face as one of the identities trained on.
+15. After a few minutes of setting up, it will show a webcam window, that will show the detection of your own face and whether or not it recognizes your face as one of the identities trained on. If you want to stop testing, click on the Esc button.
 
 To-list voor 17-11:
 2. Uitleggen van algoritmes (Matthew)
