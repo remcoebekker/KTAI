@@ -24,16 +24,16 @@ h. pip install tabulate
 15. After a few minutes of setting up, it will show a webcam window, that will show the detection of your own face and whether or not it recognizes your face as one of the identities trained on. If you want to stop testing, click on the Esc button.
 
 To-list voor 17-11:
-2. Uitleggen van algoritmes (Matthew)
-3. Met Webcam spelen: jij zit niet in de videos: wanneer herkent het algoritme jou als 1 van de identiteiten en als g            gezicht --> robuustheid (Matthew)
-5. Clean up the code and document
-6. End-to-end test
-7. ReadMe afmaken
+1. Uitleggen van algoritmes (Matthew)
+2. Met Webcam spelen: jij zit niet in de videos: wanneer herkent het algoritme jou als 1 van de identiteiten en als g            gezicht --> robuustheid (Matthew)
+3. Clean up the code and document
+4. End-to-end test
+5. ReadMe afmaken
 
 Nice-to-have
-8. Spelen met extra hyper parameters
-9. Toevoegen vergelijking resultaten met literatuur
-10. Zorgen dat de windows naar de voorgrond worden geduwd en dat de sizing goed is
+6. Spelen met extra hyper parameters
+7. Toevoegen vergelijking resultaten met literatuur
+8. Zorgen dat de windows naar de voorgrond worden geduwd en dat de sizing goed is
 
 Done voor 17-11:
 1. Analyseren van de 3 opvallende gekke resultaten (Matthew)
