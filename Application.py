@@ -49,10 +49,10 @@ def run(webcam_testing:bool):
         identities_count = face_recognizer.recognize_face_in_webcam()
     else:
         print("We are testing on a test video...")
-        face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), False)
+        face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), True)
         sequence_results = face_recognizer.recognize_faces_of_identities_in_video(TEST_VIDEO,
                                                                               TEST_VIDEO_SAMPLING_SPEED,
-                                                                              0)
+                                                                              1800)
 
         # We output the accuracy for this training frame count
         print(tabulate.tabulate(get_accuracy_table(sequence_results, TEST_VIDEO_SAMPLING_SPEED)))
@@ -142,6 +142,6 @@ def visualizev2(identity_timeline_appearances : pd.DataFrame):
 # If this module is run, it will call the run function
 if __name__ == "__main__":
     #run_hyper_parameter_1_test()
-    run(True)
+    run(False)
 
     

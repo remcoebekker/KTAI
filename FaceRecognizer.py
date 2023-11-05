@@ -111,7 +111,6 @@ class FaceRecognizer:
                     # 3 right arrow
                     if k == 32:
                         self.pause(frame, identities_count, identity_timeline_appearances, cap, frame_count, frame_height, frame_width, identities_count_per_sequence)
-
                     if k == 25 or k == 27:
                         at_end = True
 
@@ -148,9 +147,7 @@ class FaceRecognizer:
                                         identity_timeline_appearances, frame_count,
                                         identities_count_per_sequence)
             if k == 32:
-                break;
-
-
+                break
 
     def __identify_faces(self, img, minH, minW, identities_count, identity_timeline_appearances, frame_count, identity_count_per_sequence):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -158,9 +155,9 @@ class FaceRecognizer:
 
         for (x, y, w, h) in faces:
             id, confidence = self.__face_recognizer.predict(gray[y:y + h, x:x + w])
-            #print(self.__identities[id], " ", confidence)
+            print(self.__identities[id], " ", confidence)
             # If confidence is less them 100 ==> "0" : perfect match
-            if (confidence < 70):
+            if (confidence < 60):
                 identities_count[id] = identities_count[id] + 1
                 id = self.__identities[id]
                 identity_timeline_appearances.loc[(identity_timeline_appearances["frame"] == frame_count) &
@@ -178,6 +175,7 @@ class FaceRecognizer:
                 if self.__visualize:
                     self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/70) * 100), x, y, w, h)
             else:
+                print("We are adding an unknown")
                 identities_count[3] = identities_count[3] + 1
                 id = "Unknown"
                 identity_timeline_appearances.loc[(identity_timeline_appearances["frame"] == frame_count) &
@@ -200,7 +198,7 @@ class FaceRecognizer:
         for (x, y, w, h) in faces:
             id, confidence = self.__face_recognizer.predict(gray[y:y + h, x:x + w])
             # If confidence is less them 100 ==> "0" : perfect match
-            if (confidence < 70):
+            if (confidence < 60):
                 identities_count[id] = identities_count[id] + 1
                 id = self.__identities[id]
                 self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/70) * 100), x, y, w, h)
@@ -208,5 +206,3 @@ class FaceRecognizer:
                 identities_count[3] = identities_count[3] + 1
                 id = "Unknown"
                 self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/70) * 100), x, y, w, h)
-
-
