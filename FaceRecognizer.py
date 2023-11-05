@@ -38,6 +38,9 @@ class FaceRecognizer:
                 k = cv2.waitKey(10) & 0xff  # Press 'ESC' for exiting video
                 if k == 27:
                     break
+                if k == 115:
+                    cv2.imwrite("webcam.png", frame)
+                
         # Do a bit of cleanup
         print("\n [INFO] Exiting Program and cleanup stuff")
         cam.release()
