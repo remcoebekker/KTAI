@@ -26,11 +26,9 @@ h. pip install tabulate
 To-list voor 17-11:
 2. Uitleggen van algoritmes (Matthew)
 3. Met Webcam spelen: jij zit niet in de videos: wanneer herkent het algoritme jou als 1 van de identiteiten en als g            gezicht --> robuustheid (Matthew)
-4. Met Webcam spelen: ik zit wel in de videos: wanneer herkent het algoritme mij niet meer als 1 van identiteiten:               zonnebril, petje, bril op (Remco)
 5. Clean up the code and document
 6. End-to-end test
 7. ReadMe afmaken
-
 
 Nice-to-have
 8. Spelen met extra hyper parameters
@@ -42,6 +40,7 @@ Done voor 17-11:
 2. Zorgen dat de juiste Anacaonda omgeving als back-up in github staat (Remco)
 3. Volledige end-to-end test doen (Remco)
 4. Verwerken feedback (opening aanpassen, stuk verplaatsen naar methods, onderzoeksvragen, code methodes eruit) (Remco)
+5. Met Webcam spelen: ik zit wel in de videos: wanneer herkent het algoritme mij niet meer als 1 van identiteiten:               zonnebril, petje, bril op (Remco)
 
 Notes:
 Op het moment gebruiken we dit algoritme om gezichten te herkennen: LBPHFaceRecognizer.
