@@ -64,7 +64,7 @@ class Visualizer:
         cv2.imshow("stats2", np.asarray(img2))
         cv2.imshow("video", frame)
         
-        k = cv2.waitKey(1)
+        k = cv2.waitKey(50)
 
         if k == 115:
             cv2.imwrite("stats1.png", np.asarray(img1))

@@ -7,13 +7,13 @@ import numpy as np
 class Trainer:
 
 
-    def __init__(self):
-        self.__recognizer = cv2.face.LBPHFaceRecognizer_create()
+    def __init__(self, minNeighbors:int):
+        self.__recognizer = cv2.face.LBPHFaceRecognizer_create(neighbors=minNeighbors)
         self.face_samples = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
     def __getImagesAndLabels(self, path, frame_training_count:int):
-        # We create a list of image paths
-        imagePaths = [os.path.join(path, f) for f in os.listdir(path)]
+        # We create a list of image paths only jpg
+        imagePaths = [os.path.join(path, f) for f in list(filter(lambda x: x.endswith(".jpg"), os.listdir(path)))]
         face_samples = []
         ids = []
         ids_counts = {}
@@ -27,7 +27,8 @@ class Trainer:
             # And we extract the id of the image file name
             id = int(os.path.split(imagePath)[-1].split(".")[1])
             # We extract the faces, if any, from the array
-            faces = self.face_samples.detectMultiScale(img_numpy, minNeighbors=10)
+            # remove image that are to small (incorrect faces like noses)
+            faces = self.face_samples.detectMultiScale(img_numpy, minNeighbors=8, minSize=(100,100))
             # And we loop through the faces
             for (x, y, w, h) in faces:
                 id_count = ids_counts.get(id,0)

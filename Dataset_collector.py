@@ -9,13 +9,14 @@ class Dataset_collector:
         self.__faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
     def are_training_faces_already_collected_from_videos(self, training_path:str, videos:list, number_of_sampled_frames)->bool:
-        files = os.listdir(training_path)
+        # Only jpg
+        files = list(filter(lambda x: x.endswith(".jpg"), os.listdir(training_path)))
         if len(files) == len(videos) * number_of_sampled_frames:
             return True
 
         return False
 
-    def collect_training_faces_from_videos(self, training_path:str, videos:list, number_of_sampled_frames):
+    def collect_training_faces_from_videos(self, training_path:str, videos:list, number_of_sampled_frames, minNeighbors:int):
         # We loop through the list of training videos
         for i in range(0, len(videos)):
             cap = cv2.VideoCapture(videos[i])
@@ -40,7 +41,7 @@ class Dataset_collector:
                     # The image is turned into a gray scale image for easier face detection
                     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                     # Detect the faces from the image
-                    faces = self.__faceCascade.detectMultiScale(gray, 1.3, 5)
+                    faces = self.__faceCascade.detectMultiScale(gray, 1.3, minNeighbors)
                     # We loop through all the faces being detected
                     for (x, y, w, h) in faces:
                         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)

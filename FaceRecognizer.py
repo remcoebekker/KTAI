@@ -154,11 +154,12 @@ class FaceRecognizer:
 
     def __identify_faces(self, img, minH, minW, identities_count, identity_timeline_appearances, frame_count, identity_count_per_sequence):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = self.__faceCascade.detectMultiScale(gray, minNeighbors=10, minSize=(int(minW), int(minH)))
+        # 24 neighbors wont detect icons as faces
+        faces = self.__faceCascade.detectMultiScale(gray, minNeighbors=24, minSize=(int(minW), int(minH)))
 
         for (x, y, w, h) in faces:
             id, confidence = self.__face_recognizer.predict(gray[y:y + h, x:x + w])
-            print(self.__identities[id], " ", confidence)
+            #print(self.__identities[id], " ", confidence, " frame: ", frame_count)
             # If confidence is less them 100 ==> "0" : perfect match
             if (confidence < 60):
                 identities_count[id] = identities_count[id] + 1
@@ -176,9 +177,9 @@ class FaceRecognizer:
                                                  "appearances"] + 1
 
                 if self.__visualize:
-                    self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/70) * 100), x, y, w, h)
+                    self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/60) * 100), x, y, w, h)
             else:
-                print("We are adding an unknown")
+                #print("We are adding an unknown")
                 identities_count[3] = identities_count[3] + 1
                 id = "Unknown"
                 identity_timeline_appearances.loc[(identity_timeline_appearances["frame"] == frame_count) &
@@ -192,7 +193,7 @@ class FaceRecognizer:
                                                 (identity_count_per_sequence["sequence"] == seqnum),
                                                  "appearances"] + 1
                 if self.__visualize:
-                    self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/70) * 100), x, y, w, h)
+                    self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/60) * 100), x, y, w, h)
             
     def __identify_faces_in_webcam(self, img, minH, minW, identities_count):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -204,8 +205,8 @@ class FaceRecognizer:
             if (confidence < 60):
                 identities_count[id] = identities_count[id] + 1
                 id = self.__identities[id]
-                self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/70) * 100), x, y, w, h)
+                self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/60) * 100), x, y, w, h)
             else:
                 identities_count[3] = identities_count[3] + 1
                 id = "Unknown"
-                self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/70) * 100), x, y, w, h)
+                self.__visualizer.visualize_face_in_frame(img, id, 100 - ((confidence/60) * 100), x, y, w, h)
