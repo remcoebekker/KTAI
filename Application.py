@@ -1,11 +1,10 @@
-import Dataset_collector
+import DatasetCollector
 import Trainer
 import FaceRecognizer
 import pandas as pd
 import matplotlib
-from matplotlib.collections import PolyCollection
-import matplotlib.pylab as plt
 import tabulate
+
 matplotlib.use('TkAgg')
 
 # The three  identities to be trained on
@@ -21,43 +20,52 @@ TEST_VIDEO = "./Video/RHDHV#221207_Video_Analytics translator_V02.mp4"
 TEST_VIDEO_SAMPLING_SPEED = 2
 # Determines how many frames we are sampling from the training videos
 NUMBER_OF_FRAMES_SAMPLED = 500
-TRAINING_FACE_MINNEIGHBORS = 8
-DEFAULT_MINNEIGHBORS = 8
+# The minimum number of neighbors used for training faces on
+TRAINING_FACE_MIN_NEIGHBORS = 8
+# The default number of neighbors used
+DEFAULT_MIN_NEIGHBORS = 8
+# The default confidence level used for determining whether there is a match
+DEFAULT_CONFIDENCE_LEVEL = 60
 
-def run(webcam_testing:bool, retrain_model:bool):
+
+def run(webcam_testing: bool, retrain_model: bool):
     """
     Main function for the overall flow of the application.
     """
 
     # We instantiate a Dataset collector object which will extract images from the training videos of the faces
-    collector = Dataset_collector.Dataset_collector()
-    # We check whether or not the faces are already collected from the videos
-    if collector.are_training_faces_already_collected_from_videos(TRAINING_FOLDER, TRAINING_VIDEOS, NUMBER_OF_FRAMES_SAMPLED) == False:
+    collector = DatasetCollector.DatasetCollector()
+    # We check whether the faces are already collected from the videos
+    if not DatasetCollector.are_training_faces_already_collected_from_videos(TRAINING_FOLDER, TRAINING_VIDEOS,
+                                                                             NUMBER_OF_FRAMES_SAMPLED):
         # This is not the case, so we collect the faces from the videos
         print("We need to collect the faces from the training videos...this will take a few minutes")
-        collector.collect_training_faces_from_videos(TRAINING_FOLDER, TRAINING_VIDEOS, NUMBER_OF_FRAMES_SAMPLED, TRAINING_FACE_MINNEIGHBORS)
+        collector.collect_training_faces_from_videos(TRAINING_FOLDER, TRAINING_VIDEOS, NUMBER_OF_FRAMES_SAMPLED,
+                                                     TRAINING_FACE_MIN_NEIGHBORS)
 
     # Next up is instantiating the Trainer based and having it learn what the faces look like, in other words
     # learning the identity embeddings
-    if(retrain_model):
-        trainer = Trainer.Trainer(DEFAULT_MINNEIGHBORS)
+    if retrain_model:
+        trainer = Trainer.Trainer(DEFAULT_MIN_NEIGHBORS)
         trainer.train(TRAINING_FOLDER, "trainer.yml", NUMBER_OF_FRAMES_SAMPLED)
 
-    # Now we ware ready to put the trained model to the test. We instantiate the face_recognizer object
+    # Now we are ready to put the trained model to the test. We instantiate the face_recognizer object
     # Are we webcam testing?
     if webcam_testing:
-        print("We are webcam testing...")
+        print("We are webcam testing...please wait a few minutes while we are initializing")
         face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), True)
-        identities_count = face_recognizer.recognize_face_in_webcam()
+        face_recognizer.recognize_face_in_webcam(DEFAULT_CONFIDENCE_LEVEL)
     else:
-        print("We are testing on a test video...")
+        print("We are testing on a test video...please wait a few minutes while we are initializing")
         face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), True)
         sequence_results = face_recognizer.recognize_faces_of_identities_in_video(TEST_VIDEO,
-                                                                              TEST_VIDEO_SAMPLING_SPEED,
-                                                                              2133) #2133
+                                                                                  TEST_VIDEO_SAMPLING_SPEED,
+                                                                                  0,
+                                                                                  DEFAULT_CONFIDENCE_LEVEL)
 
         # We output the accuracy for this training frame count
         print(tabulate.tabulate(get_accuracy_table(sequence_results, TEST_VIDEO_SAMPLING_SPEED)))
+
 
 def get_sequences():
     # The following triples represent the start frame, the end frame and the number of frames in between in which the
@@ -69,21 +77,21 @@ def get_sequences():
     sequences.loc[len(sequences)] = [4, 3493, 4000, "Blank"]
     return sequences
 
+
 def run_minNeighbors_test():
-    print("Hyper parameter 1 stress-test: changing the frame training count")
-   
+    print("Hyper parameter 2 stress-test: changing the minimum neighbors count")
 
     # We will test the variation in accuracy when we change the number of frames per identity that we train on
-    minNeighbors = [8, 10]
-    #training sample
+    min_neighbors = [8, 10]
+    # training sample
     training_sample = 500
 
     # We loop through the different frame training counts and for each train the trainer with the specified number
     # of training frames.
-    for i in range(0, len(minNeighbors)):
-        print("minNeighbors count = " + str(minNeighbors[i]))
+    for i in range(0, len(min_neighbors)):
+        print("min_neighbors count = " + str(min_neighbors[i]))
         # We instantiate the trainer
-        trainer = Trainer.Trainer(minNeighbors[i])
+        trainer = Trainer.Trainer(min_neighbors[i])
         trainer.train(TRAINING_FOLDER, "trainer.yml", training_sample)
 
         # Now we are ready to put the trained model to the test
@@ -92,14 +100,17 @@ def run_minNeighbors_test():
         face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), False)
         sequence_results = face_recognizer.recognize_faces_of_identities_in_video(TEST_VIDEO,
                                                                                   TEST_VIDEO_SAMPLING_SPEED,
-                                                                                  0)
+                                                                                  0,
+                                                                                  DEFAULT_CONFIDENCE_LEVEL)
 
         # We output the accuracy for this training frame count
         print(tabulate.tabulate(get_accuracy_table(sequence_results, TEST_VIDEO_SAMPLING_SPEED)))
-def run_hyper_parameter_1_test():
+
+
+def run_frame_training_count_test():
     print("Hyper parameter 1 stress-test: changing the frame training count")
     # We instantiate the trainer
-    trainer = Trainer.Trainer(DEFAULT_MINNEIGHBORS)
+    trainer = Trainer.Trainer(DEFAULT_MIN_NEIGHBORS)
 
     # We will test the variation in accuracy when we change the number of frames per identity that we train on
     frame_training_count = [20, 50, 100, 500]
@@ -116,10 +127,12 @@ def run_hyper_parameter_1_test():
         face_recognizer = FaceRecognizer.FaceRecognizer(TRAINING_IDENTITIES, "trainer.yml", get_sequences(), False)
         sequence_results = face_recognizer.recognize_faces_of_identities_in_video(TEST_VIDEO,
                                                                                   TEST_VIDEO_SAMPLING_SPEED,
-                                                                                  0)
+                                                                                  0,
+                                                                                  DEFAULT_CONFIDENCE_LEVEL)
 
         # We output the accuracy for this training frame count
         print(tabulate.tabulate(get_accuracy_table(sequence_results, TEST_VIDEO_SAMPLING_SPEED)))
+
 
 def get_accuracy_table(sequence_results, test_video_sampling_speed: int):
     # We turn the sequence results into a table with the accuracy per sequence
@@ -134,10 +147,9 @@ def get_accuracy_table(sequence_results, test_video_sampling_speed: int):
             table.append([row["sequence"], format(predicted_appearances / actual_appearances, "0.2%")])
     return table
 
+
 # If this module is run, it will call the run function
 if __name__ == "__main__":
     #run_minNeighbors_test()
-    #run_hyper_parameter_1_test()
-    run(True, False)
-
-    
+    #run_frame_training_count_test()
+    run(False, True)
