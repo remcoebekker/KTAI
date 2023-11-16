@@ -25,22 +25,3 @@ i. pip install -U kaleido
 15. After a few minutes of setting up, it will output the accuracy of identity recognition for different values of the minimum number of neighbors hyper parameter.
 16. Finally, execute the "import Application" and "Application.run(True, False)" lines
 17. After a few minutes of setting up, it will show a webcam window, that will show the detection of your own face and whether or not it recognizes your face as one of the identities trained on. If you want to stop testing, click on the Esc button.
-
-To-list voor 17-11:
-1. Uitleggen van algoritmes (Matthew)
-2. Met Webcam spelen: jij zit niet in de videos: wanneer herkent het algoritme jou als 1 van de identiteiten en als g            gezicht --> robuustheid (Matthew)
-4. End-to-end test
-
-Done voor 17-11:
-1. Analyseren van de 3 opvallende gekke resultaten (Matthew)
-2. Zorgen dat de juiste Anacaonda omgeving als back-up in github staat (Remco)
-3. Volledige end-to-end test doen (Remco)
-4. Verwerken feedback (opening aanpassen, stuk verplaatsen naar methods, onderzoeksvragen, code methodes eruit) (Remco)
-5. Met Webcam spelen: ik zit wel in de videos: wanneer herkent het algoritme mij niet meer als 1 van identiteiten:               zonnebril, petje, bril op (Remco)
-6. Clean up the code and document
-7. ReadMe afmaken
-
-Notes:
-Op het moment gebruiken we dit algoritme om gezichten te herkennen: LBPHFaceRecognizer.
-Meer info hierover: https://pyimagesearch.com/2021/05/03/face-recognition-with-local-binary-patterns-lbps-and-opencv/
-https://docs.opencv.org/3.4/da/d60/tutorial_face_main.html
